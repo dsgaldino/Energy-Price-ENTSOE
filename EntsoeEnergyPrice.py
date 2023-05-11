@@ -8,18 +8,18 @@
 
 # #### Importing Libraries
 
-# In[9]:
+# In[1]:
 
 
 import pandas as pd
 import requests
 import csv
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date
 
 
 # #### Define the url
 
-# In[10]:
+# In[2]:
 
 
 # URL
@@ -29,7 +29,7 @@ end_url = '+00:00|CET|DAY&biddingZone.values=CTY|10YNL----------L!BZN|10YNL-----
 
 # #### Read the csv file
 
-# In[11]:
+# In[3]:
 
 
 df = pd.read_csv('EntsoeEnergyPrice.csv', parse_dates=['Date'], dayfirst=True)
@@ -37,7 +37,7 @@ df = pd.read_csv('EntsoeEnergyPrice.csv', parse_dates=['Date'], dayfirst=True)
 
 # #### Define the Date
 
-# In[12]:
+# In[4]:
 
 
 # The earliest date in the dataset
@@ -54,7 +54,7 @@ print('Latest date found in the dataset:', max_date)
 print('Today\'s date:', today)
 
 
-# In[13]:
+# In[5]:
 
 
 # Create list of the days that are missing
@@ -92,7 +92,7 @@ print(datesE)
 
 # #### Get the Price information based on the dates
 
-# In[14]:
+# In[6]:
 
 
 # Create a temporary DataFrame to store the daily price 
@@ -110,7 +110,7 @@ if dif_days != 0:
         df_tempL = pd.read_html(url)[0]
 
         # Add a Date column to the temporary DataFrame
-        df_tempL['Date'] = actual_date
+        df_tempL['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d')
 
         # Append the information from the temporary DataFrame to the combined DataFrame
         df_comb = pd.concat([df_comb, df_tempL], ignore_index=True)
@@ -124,7 +124,7 @@ for actual_date in datesE:
     df_tempE = pd.read_html(url)[0]
 
     # Add a Date column to the temporary DataFrame
-    df_tempE['Date'] = actual_date
+    df_tempE['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d')
 
     # Append the information from the temporary DataFrame to the combined DataFrame
     df_comb = pd.concat([df_comb, df_tempE], ignore_index=True)
@@ -132,7 +132,7 @@ for actual_date in datesE:
 
 # #### Cleaning the data
 
-# In[15]:
+# In[7]:
 
 
 #Drop the first level of columns
@@ -161,15 +161,31 @@ df_comb.drop('End', axis=1, inplace=True)
 df_comb['Import Grid (EUR/kWh)'] = df_comb['[EUR / MWh]'] / 1000
 df_comb = df_comb.drop('[EUR / MWh]', axis=1)
 
-# Append the information from the temporary DataFrame to the original
-df = pd.concat([df, df_comb], ignore_index=True)
+
+# In[8]:
+
+
+df_comb['Export Grid (EUR/kWh)'] = df_comb['Import Grid (EUR/kWh)']
+
+# Substituir valores maiores do que zero por 'ZERO' na coluna Export Grid (EUR/kWh)
+df_comb.loc[df_comb['Import Grid (EUR/kWh)'] < 0, 'Import Grid (EUR/kWh)'] = 0
+
+# Substituir valores menores ou iguais a zero por zero na coluna Import Grid (EUR/kWh)
+df_comb.loc[df_comb['Export Grid (EUR/kWh)'] > 0, 'Export Grid (EUR/kWh)'] = 0
+df_comb.loc[df_comb['Export Grid (EUR/kWh)'] < 0, 'Export Grid (EUR/kWh)'] = df_comb['Export Grid (EUR/kWh)']*(-1)
 
 
 # #### Salving the date in a CSV file
 
-# In[16]:
+# In[9]:
 
 
 # Save in a csv file
 df.to_csv('EntsoeEnergyPrice.csv', index=False)
+
+
+# In[ ]:
+
+
+
 
