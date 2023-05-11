@@ -78,7 +78,7 @@ if dif_days != 0:
         datesL.append(max_date.strftime("%d-%m-%Y"))
         
 # Earlist Dates
-for i in range(7):
+for i in range(30):
     min_date = min_date - timedelta(days=1)
     datesE.append(min_date.strftime("%d-%m-%Y"))
 
@@ -113,21 +113,19 @@ if dif_days != 0:
         df_tempL['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d')
 
         # Append the information from the temporary DataFrame to the combined DataFrame
-        df_comb = pd.concat([df_comb, df_tempL], ignore_index=True)
         
-# Updating the dataset with earliest dates
-for actual_date in datesE:
-    # Create a URL with the new date
-    url = start_url + actual_date.replace("-", ".") + end_url
+        df_comb = pd.concat([df_comb, df_tempL], ignore_index=True)
 
-    # Copy the information from the URL into a temporary DataFrame
-    df_tempE = pd.read_html(url)[0]
+        #     url = start_url + actual_date.replace("-", ".") + end_url
 
-    # Add a Date column to the temporary DataFrame
-    df_tempE['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d')
+# Copy the information from the URL into a temporary DataFrame
+df_tempE = pd.read_html(url)[0]
 
-    # Append the information from the temporary DataFrame to the combined DataFrame
-    df_comb = pd.concat([df_comb, df_tempE], ignore_index=True)
+# Add a Date column to the temporary DataFrame
+df_tempE['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d')
+
+# Append the information from the temporary DataFrame to the combined DataFrame
+df_comb = pd.concat([df_comb, df_tempE], ignore_index=True)
 
 
 # #### Cleaning the data
@@ -182,10 +180,4 @@ df_comb.loc[df_comb['Export Grid (EUR/kWh)'] < 0, 'Export Grid (EUR/kWh)'] = df_
 
 # Save in a csv file
 df.to_csv('EntsoeEnergyPrice.csv', index=False)
-
-
-# In[ ]:
-
-
-
 
