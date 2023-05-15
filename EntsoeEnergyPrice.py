@@ -27,7 +27,7 @@ end_url = '+00:00|CET|DAY&biddingZone.values=CTY|10YNL----------L!BZN|10YNL-----
 
 # #### Function Update Dataset
 
-# In[ ]:
+# In[3]:
 
 
 def update_dataset(dates, url_format, df_comb):
@@ -49,7 +49,7 @@ def update_dataset(dates, url_format, df_comb):
 
 # #### Read the csv file
 
-# In[ ]:
+# In[4]:
 
 
 # Read the original dataset
@@ -58,7 +58,7 @@ df = pd.read_csv('EntsoeEnergyPrice.csv', parse_dates=['Date'], dayfirst=True)
 
 # #### Define the Date
 
-# In[4]:
+# In[5]:
 
 
 # Read the original dataset
@@ -91,7 +91,7 @@ else:
     print('The dataset is updated!')
 
 
-# In[5]:
+# In[6]:
 
 
 # Updated the dates of interest
@@ -100,7 +100,7 @@ if dif_days != 0:
     datesL = [(max_date + timedelta(days=i+1)).strftime("%d-%m-%Y") for i in range(dif_days)]
 
 # Earliest Dates
-datesE = [(min_date - timedelta(days=1)).strftime("%d-%m-%Y")]
+datesE = [(min_date - timedelta(days=i)).strftime("%d-%m-%Y") for i in range(1, 61)]
 
 print("The list of days with data to be collected.")
 print(datesL)
