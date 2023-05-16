@@ -100,7 +100,7 @@ if dif_days != 0:
     datesL = [(max_date + timedelta(days=i+1)).strftime("%d-%m-%Y") for i in range(dif_days)]
 
 # Earliest Dates
-datesE = [(min_date - timedelta(days=i)).strftime("%d-%m-%Y") for i in range(1, 61)]
+datesE = [(min_date - timedelta(days=i)).strftime("%d-%m-%Y") for i in range(1, 91)] # Change the days range
 
 print("The list of days with data to be collected.")
 print(datesL)
