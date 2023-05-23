@@ -49,20 +49,21 @@ def update_dataset(dates, url_format, df_comb):
 
 # #### Read the csv file
 
-# In[4]:
-
-
-# Read the original dataset
-df = pd.read_csv('EntsoeEnergyPrice.csv', parse_dates=['Date'], dayfirst=True)
-
-
-# #### Define the Date
-
 # In[5]:
 
 
 # Read the original dataset
-df = pd.read_csv('EntsoeEnergyPrice.csv', parse_dates=['Date'], dayfirst=True)
+# df = pd.read_csv('EntsoeEnergyPrice.csv', parse_dates=['Date'], dayfirst=True)
+df = pd.read_csv('EntsoeEnergyPrice.csv')
+df.head()
+
+
+# #### Define the Date
+
+# In[7]:
+
+
+df['Date'] = pd.to_datetime(df['Date'])
 
 # The earliest date in the dataset
 min_date = df['Date'].min().date()
@@ -91,7 +92,7 @@ else:
     print('The dataset is updated!')
 
 
-# In[6]:
+# In[11]:
 
 
 # Updated the dates of interest
@@ -109,7 +110,7 @@ print(datesE)
 
 # #### Get the Price information based on the dates
 
-# In[6]:
+# In[12]:
 
 
 # Create a temporary DataFrame to store the daily price 
@@ -126,7 +127,7 @@ if min_date >= pd.to_datetime("2012-01-01").date():
 
 # #### Cleaning the data
 
-# In[7]:
+# In[ ]:
 
 
 # Drop the first level of columns
@@ -169,7 +170,7 @@ df_comb.loc[df_comb['Export Grid (EUR/kWh)'] < 0, 'Export Grid (EUR/kWh)'] = df_
 
 # #### Salving the date in a CSV file
 
-# In[10]:
+# In[ ]:
 
 
 # Append the information from the temporary DataFrame to the combined DataFrame
