@@ -19,7 +19,7 @@
 # 
 # *It's important to note that the code assumes the existence of the 'EntsoeEnergyPrice.csv' CSV file and may require modifications or additional dependencies to run correctly.*
 
-# #### Importing Libraries
+# #### Import Libraries
 
 # In[1]:
 
@@ -27,6 +27,8 @@
 import pandas as pd
 import numpy as np
 from datetime import timedelta, datetime
+import time
+import sys
 
 
 # #### Define the url
@@ -73,18 +75,18 @@ def convert_date(value):
 
 # #### Read the csv file
 
-# In[5]:
+# In[7]:
 
 
 # Read the original dataset
-df = pd.read_csv('EntsoeEnergyPrice2.csv')
+df = pd.read_csv('EntsoeEnergyPrice.csv')
 df['Date'] = pd.to_datetime(df['Date'])
 df.head()
 
 
 # #### Define the Date
 
-# In[6]:
+# In[8]:
 
 
 df['Date'] = pd.to_datetime(df['Date'])
@@ -103,7 +105,7 @@ print('Latest date found in the dataset:', max_date)
 print('Today\'s date:', today)
 
 
-# In[7]:
+# In[9]:
 
 
 # Create list of the days that are missing
@@ -132,7 +134,7 @@ if dif_days != 0:
     print('\n')
     
     # Create Earliest Dates
-    datesE = [(min_date - timedelta(days=i)).strftime("%d-%m-%Y") for i in range(1, 71)] # Change the days range
+    datesE = [(min_date - timedelta(days=i)).strftime("%d-%m-%Y") for i in range(1, 11)]
     
     # Updated the Earliest Dates
     if min_date >= pd.to_datetime("2012-01-01").date():
@@ -149,7 +151,7 @@ else:
     print('\n')
     
     # Create Earliest Dates
-    datesE = [(min_date - timedelta(days=i)).strftime("%d-%m-%Y") for i in range(1, 11)]
+    datesE = [(min_date - timedelta(days=i)).strftime("%d-%m-%Y") for i in range(1, 71)] # Change the days range
     
     # Updated the Earliest Dates
     if min_date >= pd.to_datetime("2012-01-01").date():
@@ -228,4 +230,17 @@ df['Date'] = df['Date'].apply(convert_date)
 
 # Save to a CSV file
 df.to_csv('EntsoeEnergyPrice.csv', index=False)
+
+
+# In[ ]:
+
+
+# Print the success message
+print('DATA UPDATED SUCCESSFULLY!')
+
+# Pause for 10 seconds
+time.sleep(10)
+
+# Close the program
+sys.exit()
 
