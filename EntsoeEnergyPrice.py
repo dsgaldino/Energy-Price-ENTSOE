@@ -134,7 +134,7 @@ if dif_days != 0:
     print('\n')
     
     # Create Earliest Dates
-    datesE = [(min_date - timedelta(days=i)).strftime("%d-%m-%Y") for i in range(1, 11)]
+    datesE = [(min_date - timedelta(days=i)).strftime("%d-%m-%Y") for i in range(1, 71)]
     
     # Updated the Earliest Dates
     if min_date >= pd.to_datetime("2012-01-01").date():
